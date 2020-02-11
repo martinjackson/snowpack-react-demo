@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"babel src --out-dir lib --watch\" \"live-server\"",
+    "start": "concurrently \"babel src --out-dir lib --watch --copy-files\" \"live-server\"",
     "prepare": "npx snowpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,15 +12,16 @@
   "license": "ISC",
   "dependencies": {
     "react": "npm:@reactesm/react",
-    "react-dom": "npm:@reactesm/react-dom",
-    "styled-components": "^5.0.0"
+    "react-dom": "npm:@reactesm/react-dom"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.0",
-    "@babel/core": "^7.8.0",
-    "@babel/preset-react": "^7.8.0",
-    "concurrently": "^5.0.2",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "babel-plugin-react-scoped-css": "^1.0.0",
+    "concurrently": "^5.1.0",
     "live-server": "^1.2.1",
-    "snowpack": "^1.0.3"
+    "load-styles": "^2.0.0",
+    "snowpack": "^1.2.0"
   }
 }

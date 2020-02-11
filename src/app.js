@@ -1,25 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import styled from "styled-components";
 
-const Button = styled.button`
-  background-color: #eac;
-  padding: 8px;
-  border: 1px solid #ccc;
-`;
+// import css from "./app.css"
 
-const Card = styled.div`
-  padding: 16px;
-  border: 1px solid #eac;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-`;
+const Card = (props) => {
+  return <div className='Card'>
+          {props.children}
+         </div>
+}
 
 const App = () => <>
                    <Card>First one</Card>
                    <Card>Another one</Card>
+                   <Card>Third one</Card>
                    </>;
 
 ReactDOM.render(<App />, document.getElementById("app"));
