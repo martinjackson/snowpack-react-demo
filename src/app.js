@@ -17,6 +17,9 @@ const Card = styled.div`
   align-items: center;
 `;
 
-const App = () => <Card>Another one</Card>;
+const App = () => <>
+                   <Card>First one</Card>
+                   <Card>Another one</Card>
+                   </>;
 
 ReactDOM.render(<App />, document.getElementById("app"));
