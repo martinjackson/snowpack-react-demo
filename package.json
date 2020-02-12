@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"babel src --out-dir lib --watch --copy-files\" \"live-server\"",
+    "watch": "unbuffer babel src --out-dir lib --watch --copy-files --verbose 2>&1 | grep --color=always -v node_modules",
+    "live": "live-server",
+    "start": "concurrently \"yarn run watch\" \"live-server\"",
     "prepare": "npx snowpack",
+    "prep": "uncss index.html > stylesheet.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -18,10 +21,11 @@
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
     "@babel/preset-react": "^7.8.3",
-    "babel-plugin-react-scoped-css": "^1.0.0",
+    "chokidar": "^3.3.1",
     "concurrently": "^5.1.0",
     "live-server": "^1.2.1",
     "load-styles": "^2.0.0",
-    "snowpack": "^1.2.0"
+    "snowpack": "^1.2.0",
+    "uncss": "^0.17.3"
   }
 }
