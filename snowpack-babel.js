@@ -3,15 +3,14 @@ const path = require('path');
 const babel = require("@babel/core");
 const chokidar = require('chokidar');
 
-const writeFileAndMkDir = require('./writeFileAndMkDir')
+const verbose = false;
 
 // TODO pull these from command line switches like babel does
-const inDir = './src'
-const outDir = './public'
+const inDir = 'src'
+const outDir = 'public'
 
 // Something to use when events are received.
 const log = console.log.bind(console);
-
 
 const watcher = chokidar.watch(inDir, {
   ignored: /(^|[\/\\])\../, // ignore dotfiles
@@ -20,40 +19,75 @@ const watcher = chokidar.watch(inDir, {
 
 // Add event listeners.
 watcher
-  .on('add',    path  => { processFile(path,outDir) })     // log(`File ${path} has been added`)
-  .on('change', path  => { processFile(path,outDir) })     // log(`File ${path} has been changed`)
-  .on('unlink', fname => { removeFile(path,outDir) })
+  .on('add',    path  => { processFile(path, inDir, outDir) })
+  .on('change', path  => { processFile(path, inDir, outDir) })
+  .on('unlink', fname => { removeFile(path, inDir, outDir) })
   .on('error', error  => log(`Watcher error: ${error}`))
-  .on('ready', () => log('Initial scan complete. Ready for changes'))
+  .on('ready', () => log('======== Babel watching for changes ========'))
 
-const removeFile = (fname,outDir) => {
-    const outFile = path.join(outDir, path.basename(fname))
-    fs.unlink(outFile, (err) => {
-      if (err) throw err;
-      log(`remove ${fname} -> ${outFile}`)
-      })
+const calcRelFile = (fname, inDir) => {
+    const subDir = path.dirname(fname)
+    if (fname.startsWith(inDir)) {
+      fname = fname.substring(inDir.length);
     }
 
+    if (fname.startsWith('/')) {
+      fname = fname.substring(1);
+    }
+
+    return fname
+  }
+
+const removeFile = (fname, inDir, outDir) => {
+    const relFname = calcRelFile(fname, inDir)
+    const outFile = path.join(outDir, relFname)
+    fs.unlink(outFile, (err) => {
+      if (err) throw err;
+      if (verbose)
+        log(`remove ${fname} -> ${outFile}`)
+      })
+}
+
+const dirCheck = (outFile) => {
+  try {
+    fs.mkdirSync(path.dirname(outFile));
+  } catch (error) {
+    if (error.code !== "EEXIST") {
+      throw error;
+    }
+  }
+}
+
 const copyFile = (fname, outFile) => {
+    dirCheck(outFile)
     fs.copyFile(fname, outFile, (err) => {
       if (err) {
         log(`ERR: ${fname} ==> ${outFile}    ERR:${err}`);
       }
-      log(`${fname} ==> ${outFile}`);
+      if (verbose)
+        log(`${fname} ==> ${outFile}`);
     });
-  }
+}
+
+const writeFileAndMkDir = (outFile, content) => {
+  dirCheck(outFile)
+  fs.writeFileSync(outFile, content);
+};
+
 
 const okToProcess = (fname) => {
     return (fname.endsWith('.js') || fname.endsWith('.ts') || fname.endsWith('.jsx'))
   }
 
-const processFile = (fname, outDir) => {
+const processFile = (fname, inDir, outDir) => {
 
-    if (!okToProcess(fname)) {
-      const outFile = path.join(outDir, path.basename(fname))
+  const relFname = calcRelFile(fname, inDir)
+  const outFile = path.join(outDir, relFname)
+
+  if (!okToProcess(fname)) {
       copyFile(fname, outFile)
       if (fname.endsWith('.css'))
-         injectCssInto(outFile, path.join(inDir,'index.html'))
+         injectCssInto(relFname, path.join(inDir,'index.html'))
       return
     }
 
@@ -65,12 +99,15 @@ const processFile = (fname, outDir) => {
 
         const firstLine = err.stack.split('\n')[0]
         const [ErrorType, fullfname, desc] = firstLine.split(/[:\(]/)
-        console.log(`${fname}:${row}:${col}  ${ErrorType}: ${desc}`)
+        if (!desc || !err.loc)
+          log(`${fname} ${err.stack}`);
+        else
+          log(`${fname}:${row}:${col}  ${ErrorType}: ${desc}`)
         }
       else {
-        const outFile = path.join(outDir, path.basename(fname))
         writeFileAndMkDir(outFile, result.code)
-        console.log(`${fname} --> ${outFile}`);
+        if (verbose)
+           log(`${fname} --> ${outFile}`);
 
         // result: { code, map, ast }
       }
@@ -79,11 +116,11 @@ const processFile = (fname, outDir) => {
 }
 
 const injectCssInto = (cssFile, htmlFile) => {
-    const link = `<link rel="stylesheet" type="text/css" href="/${cssFile}">`
+    const link = `<link rel="stylesheet" type="text/css" href="${cssFile}">`
     const headEnd = '</head>'
 
     const lines = fs.readFileSync(htmlFile, 'utf-8').split(/\r?\n/)
-    let i = lines.findIndex(element => element.includes(link))
+    let i = lines.findIndex(element => element.includes(cssFile))
     if (i == -1) {  // css is missing from html=
       i = lines.findIndex(element => element.includes(headEnd))
       if (i == -1) {
@@ -92,6 +129,7 @@ const injectCssInto = (cssFile, htmlFile) => {
         lines.splice(i, 0, link);  // insert at i with zero deletes
         try {
           fs.writeFileSync(htmlFile, lines.join('\n'));
+          // verbose ??
           log(`updated ${htmlFile} with ${cssFile}`)
         } catch(err) {
           console.error(err);

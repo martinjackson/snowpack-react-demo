@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import Card from './Card.js'
-import Demo from './Demo.js'
+import Demo from './demo/Demo.js'
 
 
 const App = () => <>

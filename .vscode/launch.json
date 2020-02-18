@@ -7,11 +7,11 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch watcher.js",
+      "name": "Launch snowpack-babel.js",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/watcher.js"
+      "program": "${workspaceFolder}/snowpack-babel.js"
     }
   ]
 }

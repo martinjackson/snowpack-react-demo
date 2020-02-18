@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "node snowpack-babel.js",
-    "live": "live-server --entry-file=/public/index.html",
+    "watch": "rm -Rf public/* && node snowpack-babel.js",
+    "live": "live-server public --mount=/web_modules:web_modules",
     "start": "concurrently \"yarn run watch\" \"yarn run live\"",
     "prepare": "snowpack",
     "cleanStart": "rm -rf node_modules web_modules public/* && rm yarn.lock && yarn && yarn start",

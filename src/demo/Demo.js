@@ -10,7 +10,7 @@ export default function SomeReactComponent(props) {
   return (
     <div className="Demo">
       <header className="Demo-header">
-        <img src="/public/logo.svg" className="Demo-logo" alt="logo" />
+        <img src="./logo.svg" className="Demo-logo" alt="logo" />
         <p>
           Edit <code>src/Demo.js</code> and save to reload.a
         </p>
