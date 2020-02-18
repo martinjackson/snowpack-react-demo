@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "rm -Rf public/* && node snowpack-babel.js",
+    "watch": "node snowpack-babel.js",
     "live": "live-server public --mount=/web_modules:web_modules",
     "start": "concurrently \"yarn run watch\" \"yarn run live\"",
     "prepare": "snowpack",
     "cleanStart": "rm -rf node_modules web_modules public/* && rm yarn.lock && yarn && yarn start",
-    "uncss": "uncss http://127.0.0.1:8080/ > stylesheet.css ",
+    "csswork": "cd public ; purifycss -i -r --out ../everything.css *.css *.js *.html demo/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -26,7 +26,7 @@
     "colors": "^1.4.0",
     "concurrently": "^5.1.0",
     "live-server": "^1.2.1",
-    "snowpack": "^1.2.0",
-    "uncss": "^0.17.3"
+    "purify-css": "^1.2.5",
+    "snowpack": "^1.2.0"
   }
 }
