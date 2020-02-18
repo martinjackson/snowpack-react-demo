@@ -3,14 +3,29 @@ const path = require('path');
 const babel = require("@babel/core");
 const chokidar = require('chokidar');
 
+var colors = require('colors');   // extending String.prototype
+
+
 const verbose = false;
 
 // TODO pull these from command line switches like babel does
 const inDir = 'src'
 const outDir = 'public'
 
-// Something to use when events are received.
-const log = console.log.bind(console);
+const log = (msg) => {
+  console.log('snowpack-babel:'.green, msg.green)
+}
+
+const verboseLog = (msg) => {
+  if (verbose)
+     console.log('snowpack-babel:'.gray, msg.gray)
+}
+
+
+const errLog = (msg) => {
+  console.log('snowpack-babel Error:'.brightRed, msg.brightRed)
+}
+
 
 const watcher = chokidar.watch(inDir, {
   ignored: /(^|[\/\\])\../, // ignore dotfiles
@@ -22,8 +37,8 @@ watcher
   .on('add',    path  => { processFile(path, inDir, outDir) })
   .on('change', path  => { processFile(path, inDir, outDir) })
   .on('unlink', fname => { removeFile(path, inDir, outDir) })
-  .on('error', error  => log(`Watcher error: ${error}`))
-  .on('ready', () => log('======== snowpack-babel watching for changes ========'))
+  .on('error', error  => err(`watch error: ${error}`))
+  .on('ready', () => log(`watching ${inDir} -> ${outDir}`))
 
 const calcRelFile = (fname, inDir) => {
     const subDir = path.dirname(fname)
@@ -43,8 +58,7 @@ const removeFile = (fname, inDir, outDir) => {
     const outFile = path.join(outDir, relFname)
     fs.unlink(outFile, (err) => {
       if (err) throw err;
-      if (verbose)
-        log(`remove ${fname} -> ${outFile}`)
+      verboseLog(`remove ${fname} -> ${outFile}`)
       })
 }
 
@@ -62,10 +76,9 @@ const copyFile = (fname, outFile) => {
     dirCheck(outFile)
     fs.copyFile(fname, outFile, (err) => {
       if (err) {
-        log(`ERR: ${fname} ==> ${outFile}    ERR:${err}`);
+        err(`ERR: ${fname} ==> ${outFile}    ERR:${err}`);
       }
-      if (verbose)
-        log(`${fname} ==> ${outFile}`);
+      verboseLog(`${fname} ==> ${outFile}`);
     });
 }
 
@@ -100,14 +113,13 @@ const processFile = (fname, inDir, outDir) => {
         const firstLine = err.stack.split('\n')[0]
         const [ErrorType, fullfname, desc] = firstLine.split(/[:\(]/)
         if (!desc || !err.loc)
-          log(`${fname} ${err.stack}`);
+          errLog(`${fname} ${err.stack}`);
         else
-          log(`${fname}:${row}:${col}  ${ErrorType}: ${desc}`)
+          errLog(`${fname}:${row}:${col}  ${ErrorType}: ${desc}`)
         }
       else {
         writeFileAndMkDir(outFile, result.code)
-        if (verbose)
-           log(`${fname} --> ${outFile}`);
+        verboseLog(`${fname} --> ${outFile}`);
 
         // result: { code, map, ast }
       }
@@ -129,7 +141,6 @@ const injectCssInto = (cssFile, htmlFile) => {
         lines.splice(i, 0, link);  // insert at i with zero deletes
         try {
           fs.writeFileSync(htmlFile, lines.join('\n'));
-          // verbose ??
           log(`updated ${htmlFile} with ${cssFile}`)
         } catch(err) {
           console.error(err);
