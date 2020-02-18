@@ -12,7 +12,7 @@ export default function SomeReactComponent(props) {
       <header className="Demo-header">
         <img src="./logo.svg" className="Demo-logo" alt="logo" />
         <p>
-          Edit <code>src/Demo.js</code> and save to reload.a
+          Edit <code>src/demo/Demo.js</code> and save to reload.
         </p>
         <Button variant="contained" color="primary">
           Hello World

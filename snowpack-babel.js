@@ -23,7 +23,7 @@ watcher
   .on('change', path  => { processFile(path, inDir, outDir) })
   .on('unlink', fname => { removeFile(path, inDir, outDir) })
   .on('error', error  => log(`Watcher error: ${error}`))
-  .on('ready', () => log('======== Babel watching for changes ========'))
+  .on('ready', () => log('======== snowpack-babel watching for changes ========'))
 
 const calcRelFile = (fname, inDir) => {
     const subDir = path.dirname(fname)
