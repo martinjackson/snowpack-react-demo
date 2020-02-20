@@ -1,0 +1,21 @@
+{
+  "name": "snowpack-react-demo-server",
+  "version": "1.0.0",
+  "description": "an http/2 nodejs server to push assets build by snowpack and babel",
+  "main": "fastify-example.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "nodejs",
+    "fastify",
+    "http/2"
+  ],
+  "author": "Martin A. Jackson",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^2.12.0",
+    "fastify-auto-push": "^0.4.0"
+  }
+}
