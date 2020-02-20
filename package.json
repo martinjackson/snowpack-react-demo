@@ -18,6 +18,7 @@
     "react": "npm:@reactesm/react",
     "react-dom": "npm:@reactesm/react-dom"
   },
+  "resolutions": { "**/**/mem": "^4.0" },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
@@ -27,6 +28,6 @@
     "concurrently": "^5.1.0",
     "live-server": "^1.2.1",
     "purify-css": "^1.2.5",
-    "snowpack": "^1.2.0"
+    "snowpack": "^1.4.0"
   }
 }
