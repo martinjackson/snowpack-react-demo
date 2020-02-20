@@ -128,7 +128,7 @@ const processFile = (fname, inDir, outDir) => {
 }
 
 const injectCssInto = (cssFile, htmlFile) => {
-    const link = `<link rel="stylesheet" type="text/css" href="${cssFile}">`
+    const link = `<link rel="stylesheet" type="text/css" href="${cssFile}" />`
     const headEnd = '</head>'
 
     const lines = fs.readFileSync(htmlFile, 'utf-8').split(/\r?\n/)
