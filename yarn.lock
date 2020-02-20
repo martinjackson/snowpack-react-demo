@@ -2769,15 +2769,15 @@ range-parser@~1.2.1:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
 
-"react-dom@npm:@reactesm/react-dom":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@reactesm/react-dom/-/react-dom-0.1.1.tgz#98874a0dc488843fe309857ca4e8761ad7b10c73"
-  integrity sha512-tZ2FyVbZiWCGRiPYASPkRk/HJRDwoVaKmuIWwHrxPtU1WL26aA3MR7RwvDqpQYkUWLztJrq3poPLx43IPL7JvQ==
+"react-dom@npm:@pika/react-dom":
+  version "16.12.2"
+  resolved "https://registry.yarnpkg.com/@pika/react-dom/-/react-dom-16.12.2.tgz#975a5af308e211aa8e7245750a343b6c3d890490"
+  integrity sha512-K3gpXxKvw7E3w8g7l+V/E4EPsgb59Ujk2K21PLt4SqBFd4luqmO0DTUI7UtYq9+PV3rLLeSukzAs6KADoTqlcQ==
 
-"react@npm:@reactesm/react":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@reactesm/react/-/react-0.1.0.tgz#64658bc6c060711d0faef7c1d1f41c28b5666dba"
-  integrity sha512-/2b9179xiryQ176R4EhAkC9xK2qQsw0YCoYS1BKIvXsnhAaPFbGMNJRe4jlwaCTX3DN7/ZTzPBiDLwB5h6/0qg==
+"react@npm:@pika/react":
+  version "16.12.2"
+  resolved "https://registry.yarnpkg.com/@pika/react/-/react-16.12.2.tgz#62ee302a3477008339dccc6f8a464377e1fc1a0f"
+  integrity sha512-7fbBjVRsCfrK1JAzRI2AlbdGbA3G/CN+8xpGliJyi4tTp5XunV+JBdjMjSa4MggtSqckEpUOckmfiUGIQvGHDA==
 
 read-pkg-up@^2.0.0:
   version "2.0.0"
