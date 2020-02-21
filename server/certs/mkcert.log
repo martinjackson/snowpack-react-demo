@@ -1,0 +1,24 @@
+
+$ mkcert -install                                                                     master 
+Created a new local CA at "/home/mjackson/.local/share/mkcert" 💥
+The local CA is now installed in the system trust store! ⚡
+ERROR: failed to execute "certutil -A -d sql:/home/mjackson/.mozilla/firefox/l2d6al4a.default": exit status 1
+
+$ mkcert ncu0190765.fda.gov "*.ncu0190765.fda.gov" example.test localhost 127.0.0.1 ::1
+Using the local CA at "/home/mjackson/.local/share/mkcert" ✨
+Warning: the local CA is not installed in the Firefox and/or Chrome/Chromium trust store! ⚠️
+Run "mkcert -install" to avoid verification errors ‼️
+
+Created a new certificate valid for the following names 📜
+ - "ncu0190765.fda.gov"
+ - "*.ncu0190765.fda.gov"
+ - "example.test"
+ - "localhost"
+ - "127.0.0.1"
+ - "::1"
+
+Reminder: X.509 wildcards only go one level deep, so this won't match a.b.ncu0190765.fda.gov ℹ️
+
+The certificate is at "./ncu0190765.fda.gov+5.pem" and the key at "./ncu0190765.fda.gov+5-key.pem" ✅
+
+

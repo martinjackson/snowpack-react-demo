@@ -22,6 +22,13 @@ archy@^1.0.0:
   resolved "https://registry.yarnpkg.com/archy/-/archy-1.0.0.tgz#f9c8c13757cc1dd7bc379ac77b2c62a5c2868c40"
   integrity sha1-+cjBN1fMHde8N5rHeyxipcKGjEA=
 
+argparse@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"
+  integrity sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==
+  dependencies:
+    sprintf-js "~1.0.2"
+
 avvio@^6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/avvio/-/avvio-6.3.0.tgz#b33c4f782755c560ddce1daf3eb9796966e0c5b5"
@@ -460,6 +467,11 @@ sonic-boom@^0.7.5:
   integrity sha512-k9E2QQ4zxuVRLDW+ZW6ISzJs3wlEorVdmM7ApDgor7wsGKSDG5YGHsGmgLY4XYh4DMlr/2ap2BWAE7yTFJtWnQ==
   dependencies:
     flatstr "^1.0.12"
+
+sprintf-js@~1.0.2:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
+  integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
 "statuses@>= 1.4.0 < 2":
   version "1.5.0"
