@@ -47,3 +47,15 @@ Spdy.createServer({
 });
 ```
 
+## Previously Read
+
+https://www.smashingmagazine.com/2017/04/guide-http2-server-push/
+
+https://blog.cloudflare.com/tools-for-debugging-testing-and-using-http-2/
+
+https://css-tricks.com/cache-aware-server-push/
+
+## Blocked at NCTR
+[Rules of Thumb](https://docs.google.com/document/d/1K0NykTXBbbbTlv60t5MyJvXjqKGsCVNYHyLEXIxYMv0/edit?usp=sharing)
+
+

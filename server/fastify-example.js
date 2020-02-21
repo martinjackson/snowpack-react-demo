@@ -26,6 +26,15 @@ const log = (...args) => {
 
 // log('args:', JSON.stringify(args,2))
 
+// defaults from      https://github.com/google/node-h2-auto-push/blob/master/ts/src/index.ts
+const cacheConfig = {
+  warmupDuration:  500;   // 500
+  promotionRatio:  0.8;   // 0.8
+  demotionRatio:   0.2;   // 0.2
+  minimumRequests:   1;   // 1
+}
+
+
 async function createServerOptions() {
   const readCertFile = (filename) => {
     return fsReadFile(path.join(CERTS_DIR, filename));
@@ -41,7 +50,7 @@ async function main() {
   let msg = ""
 
   if (args.autoPush) {
-    app.register(fastifyAutoPush.staticServe, {root: STATIC_DIR});   // It should be registered as the first in the middleware chain.
+    app.register(fastifyAutoPush.staticServe, {root: STATIC_DIR, cacheConfig});   // It should be registered as the first in the middleware chain.
     msg = 'fastifyAutoPush: ON'
   } else {
     app.register(fastifyStatic, {root: STATIC_DIR});
