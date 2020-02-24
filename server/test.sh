@@ -9,3 +9,4 @@ cd sitespeed-result/www.sitespeed.io/2020-02-21-14-02-00
 google-chrome index.html
 
 
+# sudo apt install nghttp2

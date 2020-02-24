@@ -27,9 +27,10 @@ argParser.addArgument(['--auto-push', '--ap'], {
 
 
 const args = argParser.parseArgs();
-if (args.autoPush && !args.http2) {
-  // console.warn('--auto-push is supported only with --http2. HTTP/2 turned on');
-  args.http2 = true;
+
+if (args.autoPush) {
+  args.authPush = true;   // turn [] into boolean
+  args.http2 = true;    // '--auto-push is supported only with --http2. HTTP/2 turned on'
 }
 
 module.exports = args;

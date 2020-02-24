@@ -12,13 +12,23 @@ const {promisify} = require('util');
 const fastify = require('fastify');
 const fastifyAutoPush = require('fastify-auto-push');
 const fastifyStatic = require('fastify-static');
-const args = require('./args')
 
-const fsReadFile = promisify(fs.readFile);
+const fastifyFavicon = require("fastify-favicon");
+const fastifyCompress = require("fastify-compress");
+const fastifyHelmet = require("fastify-helmet");
+
+const args = require('./args')
 
 
 const STATIC_DIR = path.join(__dirname, '..', 'public');
-const CERTS_DIR = path.join(__dirname, 'certs');
+const CERTS_DIR  = path.join(__dirname, 'certs');
+const staticPath = (...args) => { return path.join(STATIC_DIR, ...args) }
+const certPath   = (...args) => { return path.join(CERTS_DIR, ...args) }
+
+const fsReadFile = promisify(fs.readFile);
+const readCertFile = (filename) => {
+  return fsReadFile(certPath(filename));
+};
 
 const log = (...args) => {
   console.log(...args)
@@ -28,25 +38,30 @@ const log = (...args) => {
 
 // defaults from      https://github.com/google/node-h2-auto-push/blob/master/ts/src/index.ts
 const cacheConfig = {
-  warmupDuration:  500;   // 500
-  promotionRatio:  0.8;   // 0.8
-  demotionRatio:   0.2;   // 0.2
-  minimumRequests:   1;   // 1
+  warmupDuration:  1500,   // 500
+  promotionRatio:  0.3,   // 0.8
+  demotionRatio:   0.2,   // 0.2
+  minimumRequests:   1,   // 1
 }
 
+const host = 'mj-dell-15' // ncu0190765.fda.gov
+const keyFile = `${host}+5-key.pem`
+const certFile = `${host}+5.pem`
 
 async function createServerOptions() {
-  const readCertFile = (filename) => {
-    return fsReadFile(path.join(CERTS_DIR, filename));
-  };
   const [key, cert] = await Promise.all(
-      [readCertFile('ncu0190765.fda.gov+5-key.pem'), readCertFile('ncu0190765.fda.gov+5.pem')]);
+      [readCertFile(keyFile), readCertFile(certFile)]);
   return {key, cert};
 }
 
 async function main() {
   const {key, cert} = await createServerOptions();
-  const app = fastify({https: {key, cert}, http2: true});
+  const app = fastify({
+    http2: true,
+    https: {key, cert},
+    logger: { prettyPrint: true}
+    });
+
   let msg = ""
 
   if (args.autoPush) {
@@ -56,6 +71,11 @@ async function main() {
     app.register(fastifyStatic, {root: STATIC_DIR});
     msg = 'fastifyStatic: ON'
   }
+
+  app
+  .register(fastifyHelmet)
+  .register(fastifyCompress)
+  .register(fastifyFavicon, { path: staticPath("favicons") })
 
   await app.listen(args.port, '0.0.0.0');
   log(`Listening on port ${args.port}  http2: ${args.http2}  ${msg}`);
