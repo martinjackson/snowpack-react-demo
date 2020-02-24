@@ -8,7 +8,7 @@ const helper = require('./helper')
 
 const { HTTP2_HEADER_PATH } = http2.constants
 const PORT = process.env.PORT || 4000
-const PUBLIC_PATH = path.join(__dirname, '../public')
+const PUBLIC_PATH = path.join(__dirname, '../../public')
 
 const publicFiles = helper.getFiles(PUBLIC_PATH)
 const server = http2.createSecureServer({
@@ -23,6 +23,7 @@ function push (stream, path) {
   if (!file) {
     return
   }
+  console.log('push:', path);
 
   stream.pushStream({ [HTTP2_HEADER_PATH]: path }, (err, pushStream, headers) => {
     if (err) throw err;
@@ -44,8 +45,16 @@ function onRequest (req, res) {
 
   // Push with index.html
   if (reqPath === '/index.html') {
+
+    /* WORKS
     push(res.stream, '/bundle1.js')
     push(res.stream, '/bundle2.js')
+    */
+
+   let files = Array.from( publicFiles.keys() );
+   console.log('files:', files);
+   files.forEach( (f) => { push(res.stream, f)} )
+
   }
 
   // Serve file
