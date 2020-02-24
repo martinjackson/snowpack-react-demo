@@ -1,31 +1,67 @@
 const fs = require('fs');
 const path = require('path');
-const mime = require('mime-types')
+const mimetype = require('mime-types')
+const http2 = require('http2');
 
-const pushFile = (request, path) => {
-  const fname = path.basename(path)
+const mime = (fname) => {
+  let s = mimetype.contentType(fname)
+  const i = s.indexOf(';')
+  if (i != -1)
+     s = s.substring(0,i)
+  return s
+}
+
+const pushFile = (request, fpath, staticDir) => {
+  const absPath = path.join(staticDir, fpath)
+  const fname = path.basename(fpath)
   const info = {
     "cache-control": "public, max-age=31536000",
     "content-encoding": "gzip",
-    "content-type": mime.contentType(fname)   // "application/javascript"
+    "content-type": mime(fname)   // "application/javascript"
   }
+
   request.raw.stream.pushStream(
-    { ":path": `${fname}.gz` },
+    { ":path": `${fpath}.gz` },
     (err, stream) => {
-      if (err) throw err;
-      stream.respondWithFile(path, info);
+      if (err) {
+        console.log('err:, err')
+        throw err;
+      }
+      stream.on('error', (err) => {
+
+        const isRefusedStream = err.code === 'ERR_HTTP2_STREAM_ERROR' &&
+              err.message.indexOf('NGHTTP2_REFUSED_STREAM') != -1
+
+        if (!isRefusedStream) {
+          console.log('error:', err.message);
+          throw err;
+        }
+        else {
+          console.log(`Ignoring ${err.message}, ${fpath}  renderPageWithPush.js:40`);
+        }
+
+      });
+
+      stream.respondWithFile(absPath, info);
+      console.log('pushing', info["content-type"], fpath)
     }
   );
 
 }
 
-const renderPageWithpush = (request, reply, htmlFile, assets) => {
+const renderPageWithPush = (request, response, htmlFile, assets, staticDir) => {
   // const url = request.headers[":path"];
 
-  assets.each( path => pushFile(request, path)
+  assets.forEach( path => pushFile(request, path, staticDir) )
 
-  reply.type("text/html");
-  reply.sendFile(htmlFile);
+  try {
+    const stream = fs.createReadStream(htmlFile)
+    response.type('text/html').send(stream)    // dont use sendFile() it closes stream
+    console.log('sending', htmlFile);
+
+  } catch(err) {
+     console.log('error sending', htmlFile, err);
+  }
 };
 
-export default renderPageWithPush;
+module.exports = renderPageWithPush;
