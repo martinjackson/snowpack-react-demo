@@ -10,6 +10,7 @@ const App = () => <>
                    <Card>Another one</Card>
                    <Card>Third one</Card>
                    <Card>Hello</Card>
+                   <Card>Bye</Card>
                    <Demo />
                    </>;
 

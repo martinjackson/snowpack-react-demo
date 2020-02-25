@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "watch": "node snowpack-babel.js",
-    "live": "live-server public --mount=/web_modules:web_modules",
+    "live": "live-server public",
     "start": "concurrently \"yarn run watch\" \"yarn run live\"",
-    "prepare": "snowpack",
-    "cleanStart": "rm -rf node_modules web_modules public/* && rm yarn.lock && yarn && yarn start",
+    "prepare": "snowpack --dest public/ ",
+    "cleanStart": "rm -rf node_modules public/* && rm yarn.lock && yarn && yarn start",
     "csswork": "cd public ; purifycss -i -r --out ../everything.css *.css *.js *.html demo/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
