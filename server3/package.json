@@ -1,0 +1,22 @@
+{
+  "name": "http2-push-example",
+  "version": "1.0.0",
+  "description": "HTTP/2 Push example",
+  "main": "server.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src"
+  },
+  "author": "RisingStack, Inc.",
+  "license": "MIT",
+  "dependencies": {
+    "mime": "2.4.4"
+  },
+  "devDependencies": {
+    "eslint": "6.8.0",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-promise": "4.2.1"
+  }
+}

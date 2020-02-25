@@ -6,3 +6,4 @@
 npx snowpack --dest public/
 npx babel src --out-dir public --copy-files --verbose
 
+watch nghttp -ans https://localhost:4000 --color

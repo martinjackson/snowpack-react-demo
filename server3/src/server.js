@@ -2,22 +2,21 @@
 
 const fs = require('fs')
 const path = require('path')
-// eslint-disable-next-line
-const http2 = require('http2')
+const spdy = require('spdy')
 
 const helper = require('./helper')
 const args = require('./args')
 
-const { HTTP2_HEADER_PATH } = http2.constants
 
 const publicFiles = helper.getFiles(args.home)
-const server = http2.createSecureServer({
+
+const server = spdy.createServer({
   cert: fs.readFileSync(path.join(__dirname, '../ssl/cert.pem')),
   key: fs.readFileSync(path.join(__dirname, '../ssl/key.pem'))
 }, onRequest)
 
 // Server Push one file
-function serverPush (stream, path) {
+function serverPush (response, path) {
   const file = publicFiles.get(path)
 
   if (!file) {
@@ -25,37 +24,47 @@ function serverPush (stream, path) {
     return
   }
 
-  stream.pushStream({ [HTTP2_HEADER_PATH]: path }, (err, pushStream, headers) => {
+  response.push(path, file.headers, (err, writeStream) => {
     if (err) {
       // throw err;
       console.log(`error pushing: ${path}, let browser ask for asset later.`);
     } else {
-    pushStream.respondWithFD(file.fileDescriptor, file.headers)
+      const readStream = fs.createReadStream(file.filePath);
+      readStream.pipe(writeStream);
     }
   })
 }
 
 // Request handler
-function onRequest (req, res) {
+function onRequest (req, response) {
   const reqPath = req.url === '/' ? '/index.html' : req.url
   const file = publicFiles.get(reqPath)
 
   // File not found
   if (!file) {
-    res.statusCode = 404
-    res.end()
+    response.statusCode = 404
+    response.end()
     return
   }
 
-  // serverPush with index.html
-  if (reqPath === '/index.html') {
-    for (const f of publicFiles.keys()) {
-      serverPush(res.stream, f)
-      }
-  }
+  // if SPDY is off, we cannot user Server Push :(
+  if (req.isSpdy) {
 
-  // Serve file
-  res.stream.respondWithFD(file.fileDescriptor, file.headers)
+    // serverPush with index.html,
+    if (reqPath === '/index.html') {
+      for (const f of publicFiles.keys()) {
+        serverPush(response, f)
+        }
+      }
+
+    // Serve file (should be the same as response.sendFile below)
+    response.setHeader(file.headers)
+    const readStream = fs.createReadStream(file.filePath);
+    readStream.pipe(response);
+    }
+    else {
+      response.sendFile(file.filePath))
+    }
 }
 
 server.listen(args.port, (err) => {
