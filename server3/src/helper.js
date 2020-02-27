@@ -13,7 +13,15 @@ const mime = require('mime')
 
 function scanDir(files, baseDir, subDir) {
   const newDir = path.join(baseDir, subDir);
-  fs.readdirSync(newDir).forEach(fileName => {
+  let list = []
+    try {
+      fs.readdirSync(newDir)
+    } catch (err) {
+      console.log('err:', err.message);
+      return list
+    }
+
+  list.forEach(fileName => {
 
     const filePath = path.join(baseDir, subDir, fileName);
     let stat
@@ -47,6 +55,8 @@ function scanDir(files, baseDir, subDir) {
 
 function getFiles (baseDir) {
   const files = new Map()
+
+  console.log(`scanning ${baseDir}`);
 
   scanDir(files, baseDir, '')
 
