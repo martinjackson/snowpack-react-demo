@@ -4,8 +4,8 @@ const http2 = require('http2');
 const koa = require('koa');
 
 const options = {
-    key: fs.readFileSync('./selfsigned.key'),
-    cert: fs.readFileSync('./selfsigned.crt'),
+    key: fs.readFileSync('./ssl/mj-dell-15.key'),
+    cert: fs.readFileSync('./ssl/mj-dell-15.crt'),
 };
 
 const app = new koa();
