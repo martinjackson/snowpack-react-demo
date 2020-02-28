@@ -17,7 +17,7 @@ function scanDir(files, baseDir, subDir) {
   try {
       list = fs.readdirSync(newDir)
   } catch(err) {
-    console.log(err.message);
+    console.log('err:', err.message);
     return
   }
 
@@ -55,6 +55,8 @@ function scanDir(files, baseDir, subDir) {
 
 function getFiles (baseDir) {
   const files = new Map()
+
+  console.log(`scanning ${baseDir}`);
 
   scanDir(files, baseDir, '')
 
