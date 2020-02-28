@@ -13,7 +13,15 @@ const mime = require('mime')
 
 function scanDir(files, baseDir, subDir) {
   const newDir = path.join(baseDir, subDir);
-  fs.readdirSync(newDir).forEach(fileName => {
+  let list = []
+  try {
+      list = fs.readdirSync(newDir)
+  } catch(err) {
+    console.log(err.message);
+    return
+  }
+
+  list.forEach(fileName => {
 
     const filePath = path.join(baseDir, subDir, fileName);
     let stat

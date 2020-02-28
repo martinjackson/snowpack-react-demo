@@ -35,6 +35,22 @@ function serverPush (response, path) {
   })
 }
 
+function sendFile(fname, res) {
+  console.log('Reading', fname);
+
+  fs.readFile(fname, (err, data) => {
+      if (err) {
+        res.status(500).send(error.toString())
+        return
+      }
+
+      res.writeHead(200);
+      res.end(data);
+      console.log('done.');
+
+    })
+}
+
 // Request handler
 function onRequest (req, response) {
   const reqPath = req.url === '/' ? '/index.html' : req.url
@@ -48,24 +64,16 @@ function onRequest (req, response) {
   }
 
   // if SPDY is off, we cannot user Server Push :(
-  if (req.isSpdy) {
+  if (req.isSpdy && reqPath === '/index.html') {
 
-    // serverPush with index.html,
-    if (reqPath === '/index.html') {
+      // serverPush with index.html
       for (const f of publicFiles.keys()) {
         serverPush(response, f)
         }
-      }
+    }
 
-    // Serve file (should be the same as response.sendFile below)
-    response.setHeader(file.headers)
-    const readStream = fs.createReadStream(file.filePath);
-    readStream.pipe(response);
-    }
-    else {
-      response.sendFile(file.filePath))
-    }
-}
+    sendFile(file.filePath, response)
+  }
 
 server.listen(args.port, (err) => {
   if (err) {
