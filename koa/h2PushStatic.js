@@ -19,7 +19,7 @@ function init(homeDir) {
 
 // Server Push one file
 function serverPush (stream, path) {
-  console.log('push:', path);
+  // console.log('push:', path);
 
   const file = publicFiles.get(path)
 
@@ -38,11 +38,15 @@ function serverPush (stream, path) {
   })
 }
 
+const keysStr = (obj) => {
+  return Array.from(publicFiles.keys()).join(', ')
+}
+
 // Request handler
 function onRequest (req, res) {
   const reqPath = req.url === '/' ? '/index.html' : req.url
   const file = publicFiles.get(reqPath)
-  console.log(`${reqPath} ${file}`);
+  console.log(`   ${file.filePath}    push: ${res.stream.pushAllowed}`);
 
 
   // File not found in list
@@ -54,6 +58,8 @@ function onRequest (req, res) {
 
   // serverPush with index.html
   if (reqPath === '/index.html' && res.stream.pushAllowed) {
+    console.log('   push:', keysStr(publicFiles));
+
     for (const f of publicFiles.keys()) {
       serverPush(res.stream, f)
       }

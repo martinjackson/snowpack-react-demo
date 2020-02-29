@@ -12,6 +12,8 @@ clinic bubbleprof -- node server.js --port 8000 --home ../public
 for i in {1..100}; do nghttp -ans https://localhost:8000 ; done 
 
 
+h2load -n100000 -c100 -m10 https://localhost:8000
+h2load -n100000 -c100 -m10 --h1 https://localhost:8000
 
 
 #####################################################################33

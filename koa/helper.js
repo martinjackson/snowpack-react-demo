@@ -30,6 +30,7 @@ function scanDir(files, baseDir, subDir) {
 
       files.set(`/${fullName}`, {
         fileDescriptor,
+        filePath,
         headers: {
           "Cache-Control": `max-age=${age}`,
           "content-length": stat.size,
