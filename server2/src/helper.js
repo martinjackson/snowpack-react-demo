@@ -5,6 +5,8 @@ const path = require('path')
 const mime = require('mime')
 
 function scanDir(files, baseDir, subDir) {
+  console.log(`scanning-${baseDir}-${subDir}-`);
+
   const newDir = path.join(baseDir, subDir);
   fs.readdirSync(newDir).forEach(fileName => {
 

@@ -10,6 +10,8 @@ const args = require('./args')
 
 const { HTTP2_HEADER_PATH } = http2.constants
 
+console.log('args:', args);
+
 const publicFiles = helper.getFiles(args.home)
 const server = http2.createSecureServer({
   cert: fs.readFileSync(path.join(__dirname, '../ssl/cert.pem')),

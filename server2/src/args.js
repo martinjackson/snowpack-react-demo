@@ -25,7 +25,11 @@ argParser.addArgument(['--home'], {
 const args = argParser.parseArgs();
 
 if (!args.home.startsWith('/')) {             // Relative Path detected
-  args.home = path.join(__dirname, args.home)
+
+  const out = path.join(__dirname, args.home)
+  console.log(`${args.home} -> ${out}`);
+  args.home = out
+
 }
 
 

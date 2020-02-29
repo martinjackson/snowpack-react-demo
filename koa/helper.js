@@ -25,9 +25,13 @@ function scanDir(files, baseDir, subDir) {
 
       const fullName = path.join(subDir, fileName);
 
+      const age = (fileName.startsWith('react')) ? 31536000 : 5*60  // 1 year for react*.js for cache age, 5 minutes everything else
+      // Cache-Control: max-age=31536000
+
       files.set(`/${fullName}`, {
         fileDescriptor,
         headers: {
+          "Cache-Control": `max-age=${age}`,
           "content-length": stat.size,
           "last-modified": stat.mtime.toUTCString(),
           "content-type": contentType

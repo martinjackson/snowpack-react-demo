@@ -19,6 +19,8 @@ function init(homeDir) {
 
 // Server Push one file
 function serverPush (stream, path) {
+  console.log('push:', path);
+
   const file = publicFiles.get(path)
 
   if (!file) {
@@ -40,6 +42,8 @@ function serverPush (stream, path) {
 function onRequest (req, res) {
   const reqPath = req.url === '/' ? '/index.html' : req.url
   const file = publicFiles.get(reqPath)
+  console.log(`${reqPath} ${file}`);
+
 
   // File not found in list
   if (!file) {
@@ -49,7 +53,7 @@ function onRequest (req, res) {
   }
 
   // serverPush with index.html
-  if (reqPath === '/index.html') {
+  if (reqPath === '/index.html' && res.stream.pushAllowed) {
     for (const f of publicFiles.keys()) {
       serverPush(res.stream, f)
       }

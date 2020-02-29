@@ -45,8 +45,8 @@ const cacheConfig = {
 // find . -name '*' -type f -exec echo "'{}'," \;
 // find ../web_modules -name '*.js' -exec echo "'{}'," \;
 const spaFiles = [
-  'web_modules/react-dom.js',
-  'web_modules/react.js',
+  'react-dom.js',
+  'react.js',
   'demo/Demo.css',
   'demo/Demo.js',
   'Card.js',
