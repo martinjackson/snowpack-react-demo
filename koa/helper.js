@@ -6,6 +6,8 @@ const mime = require('mime')
 
 function scanDir(files, baseDir, subDir) {
   const newDir = path.join(baseDir, subDir);
+  console.log(`Scanning ${newDir}`);
+
   fs.readdirSync(newDir).forEach(fileName => {
 
     const filePath = path.join(baseDir, subDir, fileName);
@@ -18,12 +20,12 @@ function scanDir(files, baseDir, subDir) {
     }
 
     if (stat.isDirectory()) {
-       scanDir(files, baseDir, fileName)
+       scanDir(files, newDir, fileName)
     } else {
       const fileDescriptor = fs.openSync(filePath, "r");
       const contentType = mime.getType(filePath);
 
-      const fullName = path.join(subDir, fileName);
+      const fullName = path.join(newDir, fileName);
 
       const age = (fileName.startsWith('react')) ? 31536000 : 5*60  // 1 year for react*.js for cache age, 5 minutes everything else
       // Cache-Control: max-age=31536000

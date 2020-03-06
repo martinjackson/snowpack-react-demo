@@ -46,7 +46,7 @@ const keysStr = (obj) => {
 function onRequest (req, res) {
   const reqPath = req.url === '/' ? '/index.html' : req.url
   const file = publicFiles.get(reqPath)
-  console.log(`   ${file.filePath}    push: ${res.stream.pushAllowed}`);
+  console.log(` ${reqPath}  ${(file) ? file.filePath : 'Not Found'}    push: ${res.stream.pushAllowed}`);
 
 
   // File not found in list
