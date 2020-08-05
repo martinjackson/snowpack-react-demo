@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "argparse": "^1.0.10",
-    "fastify": "^2.12.0",
+    "fastify": "^2.15.1",
     "fastify-auto-push": "^0.4.0",
     "fastify-compress": "^2.0.1",
     "fastify-favicon": "^2.0.0",
